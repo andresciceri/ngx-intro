@@ -1,0 +1,10 @@
+{
+  "name": "ngx-intro-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/ngx-intro-e2e/src",
+  "tags": [],
+  "implicitDependencies": ["ngx-intro"],
+  "// targets": "to see all targets run: nx show project ngx-intro-e2e --web",
+  "targets": {}
+}
