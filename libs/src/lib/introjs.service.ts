@@ -16,7 +16,12 @@ export class IntrojsService {
     this.intro = introJs.default();
   }
 
-  startTour(steps: IntroStep[], options?: Options): void {
+  setOptions(options: Partial<Options>): void {
+    this.intro.setOptions(options);
+  }
+
+  startTour(steps: IntroStep[], options?: Partial<Options>): void {
+    // Updated to Partial<Options>
     this.intro.setOptions({ steps, ...options });
     this.intro.start();
   }
