@@ -3,5 +3,12 @@
   "dest": "../dist/libs",
   "lib": {
     "entryFile": "src/index.ts"
-  }
+  },
+  "assets": [
+    {
+      "glob": "**/*",
+      "input": "src/assets",
+      "output": "assets"
+    }
+  ]
 }
