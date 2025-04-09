@@ -1,8 +1,16 @@
 {
-  "name": "@ngx-intro/source",
+  "name": "@andresciceri/ngx-intro",
   "version": "0.0.1",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build": "nx build ngx-intro-js",
+    "lint": "nx lint ngx-intro-js",
+    "test": "nx test ngx-intro-js",
+    "test:watch": "nx test ngx-intro-js --watch",
+    "test:ci": "nx test ngx-intro-js --ci",
+    "test:coverage": "nx test ngx-intro-js --coverage",
+    "test:debug": "nx test ngx-intro-js --runInBand --detectOpenHandles"
+  },
   "private": false,
   "description": "Angular wrapper for intro.js",
   "keywords": [

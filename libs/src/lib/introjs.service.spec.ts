@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { IntroStep } from 'intro.js/src/core/steps';
 import { Options } from 'intro.js/src/option';
-
 import { IntrojsService } from './introjs.service';
 
 describe('IntrojsService', () => {
