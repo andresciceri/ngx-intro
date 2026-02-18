@@ -8,34 +8,93 @@ import { IntroStep } from 'intro.js/src/core/steps';
   providedIn: 'root',
 })
 export class IntrojsService {
-  private intro: IntroJs;
+  private intro: IntroJs | null = null;
   private renderer: Renderer2;
+  private isActive = false;
 
   constructor(rendererFactory: RendererFactory2) {
     this.renderer = rendererFactory.createRenderer(null, null);
+  }
+
+  private createInstance(): IntroJs {
+    if (this.intro) {
+      this.destroyTour();
+    }
     this.intro = introJs.default();
+    return this.intro;
+  }
+
+  private destroyTour(): void {
+    if (this.intro) {
+      try {
+        this.intro.exit(true);
+      } catch (_) {
+        // Ignore errors during cleanup
+      }
+      this.intro = null;
+      this.isActive = false;
+    }
   }
 
   setOptions(options: Partial<Options>): void {
+    if (!this.intro) {
+      this.intro = this.createInstance();
+    }
     this.intro.setOptions(options);
   }
 
   startTour(steps: IntroStep[], options?: Partial<Options>): void {
-    // Updated to Partial<Options>
-    this.intro.setOptions({ steps, ...options });
-    this.intro.start();
+    const intro = this.createInstance();
+    this.isActive = true;
+
+    intro.setOptions({
+      steps,
+      keyboardNavigation: true,
+      ...options,
+    });
+
+    // Automatically clean up when tour completes or exits
+    intro.oncomplete(() => {
+      this.isActive = false;
+      this.intro = null;
+    });
+
+    intro.onexit(() => {
+      this.isActive = false;
+      this.intro = null;
+    });
+
+    intro.start();
   }
 
-  exitTour(force: boolean): void {
-    this.intro.exit(force);
+  exitTour(force = true): void {
+    if (this.intro && this.isActive) {
+      this.intro.exit(force);
+    }
+    this.isActive = false;
+    this.intro = null;
   }
 
   onComplete(callback: () => void): void {
-    this.intro.oncomplete(callback);
+    const intro = this.intro || this.createInstance();
+    intro.oncomplete(() => {
+      callback();
+      this.isActive = false;
+      this.intro = null;
+    });
   }
 
   onExit(callback: () => void): void {
-    this.intro.onexit(callback);
+    const intro = this.intro || this.createInstance();
+    intro.onexit(() => {
+      callback();
+      this.isActive = false;
+      this.intro = null;
+    });
+  }
+
+  isRunning(): boolean {
+    return this.isActive;
   }
 
   applyTheme(themeUrl: string): void {
